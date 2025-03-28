@@ -1,24 +1,33 @@
 <script>
-  import Versions from './components/Versions.svelte'
-  import electronLogo from './assets/electron.svg'
+  let hmFile = ''
+  let fmFile = ''
+  let outFile = ''
+  let errMsg = $state('')
 
-  const ipcHandle = () => window.electron.ipcRenderer.send('ping')
+  async function getFile(h_or_f, o_or_c) {
+    console.log('h_or_f', h_or_f, 'o_or_c', o_or_c)
+    const res = await window.electron.ipcRenderer.invoke('opendialog', h_or_f, o_or_c)
+    console.log('getFile =>', res)
+    errMsg = ''
+    return res
+  }
+
+  async function processCSV() {
+    if (!hmFile || !fmFile || !outFile) {
+      errMsg = 'Alle 3 Dateien müssen ausgewählt sein'
+      return
+    }
+    const res = await window.electron.ipcRenderer.invoke('processCSV', hmFile, fmFile, outFile)
+    console.log('res', res)
+  }
 </script>
 
-<img alt="logo" class="logo" src={electronLogo} />
-<div class="creator">Powered by electron-vite</div>
-<div class="text">
-  Build an Electron app with
-  <span class="svelte">Svelte</span>
+<div>
+  {#if errMsg}
+    <p>{errMsg}</p>
+  {/if}
+  <button onclick={async () => (hmFile = await getFile(true, true))}>HM</button>
+  <button onclick={async () => (fmFile = await getFile(false, true))}>FM</button>
+  <button onclick={async () => (outFile = await getFile(true, false))}>OUT</button>
+  <button onclick={processCSV}>Start</button>
 </div>
-<p class="tip">Please try pressing <code>F12</code> to open the devTool</p>
-<div class="actions">
-  <div class="action">
-    <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">Documentation</a>
-  </div>
-  <div class="action">
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions a11y-missing-attribute-->
-    <a target="_blank" rel="noreferrer" on:click={ipcHandle}>Send IPC</a>
-  </div>
-</div>
-<Versions />

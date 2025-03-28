@@ -122,6 +122,7 @@ function hrows(hmRecords, fmRecords) {
 }
 
 function frows(hmRecords, fmRecords) {
+  const res = []
   for (const frow of fmRecords) {
     frow['@MH@MF'] = ''
     if (!frow['EMAIL']) {
@@ -134,10 +135,11 @@ function frows(hmRecords, fmRecords) {
       }
       if (hrow['EMAIL']) {
         frow['EMAIL2'] = hrow['EMAIL']
-      }
+        res.push(frow)
+      } else continue
     }
   }
-  return fmRecords
+  return res
 }
 
 export async function processCSV(ev, hmFile, fmFile, outFile, mode = 'h') {

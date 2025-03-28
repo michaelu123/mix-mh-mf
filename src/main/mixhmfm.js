@@ -149,6 +149,7 @@ export async function processCSV(ev, hmFile, fmFile, outFile, mode = 'h') {
     skip_empty_lines: true,
     delimiter: ';'
   })
+  msgs.length = 0
   msgs.push('Hauptmitglieder: ' + hmRecords.length + ' Einträge gelesen')
   for (const row of hmRecords) {
     hmap.set(row['MITGLIEDSNR'], row)

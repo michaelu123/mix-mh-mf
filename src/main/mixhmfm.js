@@ -99,8 +99,9 @@ function toHNr(s) {
 function hrows(hmRecords, fmRecords) {
   for (const hrow of hmRecords) {
     hrow['@MH@MF'] = ''
+    hrow['SKYPE'] = ''
     if (!hrow['EMAIL']) {
-      hrow['MITGLIEDSNR'] += ' @H'
+      hrow['SKYPE'] += '@H '
       hrow['@MH@MF'] += '@H'
     }
   }
@@ -113,9 +114,16 @@ function hrows(hmRecords, fmRecords) {
         continue
       }
       if (!hrow['MITGLIEDSNR'].includes('@F')) {
-        hrow['MITGLIEDSNR'] += ' @F'
+        hrow['SKYPE'] += '@F '
         hrow['@MH@MF'] += '@F'
       }
+    }
+  }
+  for (const hrow of hmRecords) {
+    hrow['SKYPE'] += '         *' + hrow['MITGLIEDSNR'] + '*'
+    if (!hrow['EMAIL']) {
+      hrow['SKYPE'] += '@H '
+      hrow['@MH@MF'] += '@H'
     }
   }
   return hmRecords

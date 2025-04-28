@@ -113,17 +113,15 @@ function hrows(hmRecords, fmRecords) {
         msgs.push('Kein Hauptmitglied für ' + name(frow))
         continue
       }
-      if (!hrow['MITGLIEDSNR'].includes('@F')) {
+      if (!hrow['SKYPE'].includes('@F')) {
         hrow['SKYPE'] += '@F '
         hrow['@MH@MF'] += '@F'
       }
     }
   }
   for (const hrow of hmRecords) {
-    hrow['SKYPE'] += '         *' + hrow['MITGLIEDSNR'] + '*'
-    if (!hrow['EMAIL']) {
-      hrow['SKYPE'] += '@H '
-      hrow['@MH@MF'] += '@H'
+    if (hrow['SYKPE'] != '') {
+      hrow['SKYPE'] += '         *' + hrow['MITGLIEDSNR'] + '*'
     }
   }
   return hmRecords
